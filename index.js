@@ -1,10 +1,12 @@
-const helmet        = require('helmet');
-const morgan        = require('morgan');
-const express       = require('express');
-const mongoose      = require('mongoose');
-const argv          = require('yargs').argv;
-const genres_router = require('./routes/genres');
-const customers_router = require('./routes/customers');
+const helmet            = require('helmet');
+const morgan            = require('morgan');
+const express           = require('express');
+const mongoose          = require('mongoose');
+const argv              = require('yargs').argv;
+const users_router     = require('./routes/users');
+const genres_router     = require('./routes/genres');
+const movies_router     = require('./routes/movies');
+const customers_router  = require('./routes/customers');
 
 //Enter UserName : --username (or -u) and Password : --password (or -p) --database (or -d)
 //eg : node index.js --username=xyz --password=abc --database=123
@@ -16,7 +18,9 @@ const app           = express();
 app.use(express.json());
 app.use(helmet());
 if(app.get('env') === 'development')    app.use(morgan('short'));
+app.use('/api/users', users_router);
 app.use('/api/genres', genres_router);
+app.use('/api/movies', movies_router);
 app.use('/api/customers', customers_router);
 
 const port_no = process.env.PORT || 3001;

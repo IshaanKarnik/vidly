@@ -1,9 +1,7 @@
 const _                     = require('lodash');
 const express               = require('express');
-//const mongoose  = require('mongoose');
-//const Joi       = require('@hapi/joi');
-const {Customer, validate} = require('../models/customers');
-const router    = express.Router();
+const {Customer, validate}  = require('../models/customers');
+const router                = express.Router();
 
 
 router.get('/', async (req, res) => {   

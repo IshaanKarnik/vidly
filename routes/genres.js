@@ -1,6 +1,4 @@
 const express           = require('express');
-//const mongoose  = require('mongoose');
-//const Joi       = require('@hapi/joi');
 const router            = express.Router();
 const {Genre, validate} = require('../models/genres');
 
