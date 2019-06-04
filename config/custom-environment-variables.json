@@ -1,0 +1,6 @@
+{
+    "dbName": "DATABASE_NAME",
+    "dbUser": "DATABASE_USER",
+    "dbPassword": "DATABASE_PASSWORD",
+    "jwtPrivateKey": "JWT_PRIVATE_KEY"
+}

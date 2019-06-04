@@ -1,7 +1,9 @@
 const User      = require('../models/users').User;
+const config    = require('../startup/config');
 const jwt       = require('jsonwebtoken');
 const Joi       = require('@hapi/joi');
 const express   = require('express');
+const argon2    = require('argon2');
 const _         = require('lodash');
 const router    = express.Router();
 
@@ -11,6 +13,12 @@ router.post('/', async (req, res, next) => {
 
     let user = await User.findOne({email: req.body.email});
     if(!user) return res.status(400).json({error: 'Invalid E-Mail or Password'});
+
+    const password = await argon2.hash(user.password, {
+        type: argon2.argon2id,
+        timeCost: 5,
+        hashLength: 32
+    });
 
     user = _.pick(user, ['_id', 'isAdmin']);
     
