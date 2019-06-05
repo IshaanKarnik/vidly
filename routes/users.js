@@ -7,7 +7,7 @@ const router            = express.Router();
 router.post('/', async(req, res) => {
     try{
         const { error } = validate(req.body);
-        if(error) return res.status(400).send(error.details[0].message);
+        if(error) return res.status(400).json({ error: error.details[0].message});
         
         let user = User(_.pick(req.body, ['name', 'email', 'password']));
         
@@ -17,7 +17,9 @@ router.post('/', async(req, res) => {
             hashLength: 32
         });
 
-        res.status(200).send(_.pick(await user.save(), ['_id', 'name', 'email']));
+        const token = user.generateAuthToken();
+
+        res.status(200).header('x-auth-token', token).send(_.pick(await user.save(), ['_id', 'name', 'email']));
     }
     catch(ex){
         return res.status(400).send(ex.message);

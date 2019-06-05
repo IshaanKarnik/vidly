@@ -1,29 +1,22 @@
-const User      = require('../models/users').User;
-const config    = require('../startup/config');
-const jwt       = require('jsonwebtoken');
-const Joi       = require('@hapi/joi');
-const express   = require('express');
-const argon2    = require('argon2');
-const _         = require('lodash');
-const router    = express.Router();
-
-router.post('/', async (req, res, next) => {
+const User          = require('../models/users').User;
+const Joi           = require('@hapi/joi');
+const express       = require('express');
+const argon2        = require('argon2');
+const _             = require('lodash');
+const router        = express.Router();
+router.post('/', async (req, res) => {
     const { error } = validate(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
+    if(error) return res.status(400).json({error: error.details[0].message});
 
-    let user = await User.findOne({email: req.body.email});
-    if(!user) return res.status(400).json({error: 'Invalid E-Mail or Password'});
+    const user = await User.findOne({email: req.body.email});
+    if(!user) return res.status(401).json({error: 'Invalid E-Mail or Password'});
 
-    const password = await argon2.hash(user.password, {
-        type: argon2.argon2id,
-        timeCost: 5,
-        hashLength: 32
-    });
-
-    user = _.pick(user, ['_id', 'isAdmin']);
+    const passwordMatch = await argon2.verify(user.password, req.body.password);
+    if(!passwordMatch) return res.status(401).json({error: 'Invalid E-Mail or Password'});
     
-    const token = await jwt.sign(user, 'TestSecret');
+    const token = user.generateAuthToken();
 
+    res.status(200).json({token});
 });
 
 function validate(auth){
