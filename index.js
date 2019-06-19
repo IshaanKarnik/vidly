@@ -8,6 +8,7 @@ const auth_router       = require('./routes/auth');
 const users_router      = require('./routes/users');
 const genres_router     = require('./routes/genres');
 const movies_router     = require('./routes/movies');
+const rentals_router    = require('./routes/rentals');
 const customers_router  = require('./routes/customers');
 
 require('express-async-errors');
@@ -22,11 +23,12 @@ const app           = express();
 app.use(express.json());
 app.use(helmet());
 if(app.get('env') === 'development')    app.use(morgan('short'));
+app.use('/api/auth', auth_router);
 app.use('/api/users', users_router);
 app.use('/api/genres', genres_router);
 app.use('/api/movies', movies_router);
+app.use('/api/rentals', rentals_router);
 app.use('/api/customers', customers_router);
-app.use('/api/auth', auth_router);
 
 const port_no = process.env.PORT || 3001;
 app.listen(port_no, () => console.log(`Listening on port number ${port_no}`));

@@ -4,7 +4,7 @@ const {Genre, validate} = require('../models/genres');
 const auth              = require('../middlewares/auth');
 const admin             = require('../middlewares/admin');
 router.get('/', async (req, res) => {   
-    res.status(200).send(await Genre.find().sort('name'));
+    res.status(200).send(await Genre.find().sort('name')).select('-__v');
 });
 
 router.get('/:id', async (req, res) => {   

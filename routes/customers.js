@@ -5,7 +5,7 @@ const router                = express.Router();
 
 
 router.get('/', async (req, res) => {   
-    res.status(200).send(await Customer.find().sort('name'));
+    res.status(200).send(await Customer.find().sort('name')).select('-__v');
 });
 
 router.get('/:id', async (req, res) => {   

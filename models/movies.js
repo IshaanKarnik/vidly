@@ -2,7 +2,7 @@ const mongoose      = require('mongoose');
 const Joi           = require('@hapi/joi');
 const genreSchema   = require('./genres').genreSchema;
 Joi.objectId        = require('joi-objectid')(Joi);
-const Movie = mongoose.model('Movies', new mongoose.Schema({
+const Movie = mongoose.model('Movie', new mongoose.Schema({
     title: {
         type: String,
         trim: true,
